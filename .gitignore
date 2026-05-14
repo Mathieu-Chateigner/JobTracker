@@ -2,8 +2,7 @@
 bin/
 obj/
 
-## Database (user data)
-*.db
+## Database WAL temp files (the .db itself is tracked)
 *.db-shm
 *.db-wal
 

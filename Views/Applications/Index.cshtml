@@ -1,0 +1,298 @@
+@model IEnumerable<JobTracker.Models.JobApplication>
+@using JobTracker.Models
+@using System.Globalization
+@{
+    ViewData["Title"] = "Candidatures";
+    var statusFilter = ViewBag.StatusFilter as ApplicationStatus?;
+    var search = ViewBag.Search as string;
+    var sort = ViewBag.Sort as string;
+    var fr = new CultureInfo("fr-FR");
+    var count = Model.Count();
+}
+
+<div class="page-container">
+    <div class="page-header">
+        <div>
+            <h1 class="page-title">Candidatures</h1>
+            <p class="page-subtitle">@count candidature@(count > 1 ? "s" : "")</p>
+        </div>
+        <div class="page-header-actions">
+            <a href="/Applications/Export" class="btn btn-ghost" title="Exporter en JSON">↓ Exporter</a>
+            <label class="btn btn-ghost" title="Importer un fichier JSON" style="cursor:pointer">
+                ↑ Importer
+                <form id="importForm" method="post" action="/Applications/Import" enctype="multipart/form-data" style="display:none">
+                    @Html.AntiForgeryToken()
+                    <input type="file" name="file" id="importFile" accept=".json" />
+                </form>
+            </label>
+            <a href="/Applications/Create" class="btn btn-primary">+ Nouvelle candidature</a>
+        </div>
+    </div>
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="toast toast-error" id="toast">
+            <span>✕</span> @TempData["Error"]
+        </div>
+    }
+
+    <form method="get" class="filters-bar">
+        <input type="text" name="search" value="@search" placeholder="Rechercher entreprise ou poste…" class="filter-input" />
+        <select name="status" class="filter-select">
+            <option value="">Tous les statuts</option>
+            @foreach (ApplicationStatus s in Enum.GetValues(typeof(ApplicationStatus)))
+            {
+                if (statusFilter == s)
+                {
+                    <option value="@((int)s)" selected>@s.ToFrench()</option>
+                }
+                else
+                {
+                    <option value="@((int)s)">@s.ToFrench()</option>
+                }
+            }
+        </select>
+        <select name="sort" class="filter-select">
+            @if (sort == "date")    { <option value="date" selected>Date ↓</option> }    else { <option value="date">Date ↓</option> }
+            @if (sort == "company") { <option value="company" selected>Entreprise A–Z</option> } else { <option value="company">Entreprise A–Z</option> }
+            @if (sort == "status")  { <option value="status" selected>Statut</option> }  else { <option value="status">Statut</option> }
+        </select>
+        <button type="submit" class="btn btn-secondary">Filtrer</button>
+        @if (!string.IsNullOrEmpty(search) || statusFilter.HasValue)
+        {
+            <a href="/Applications" class="btn btn-ghost">Effacer</a>
+        }
+    </form>
+
+    @if (!Model.Any())
+    {
+        <div class="empty-state">
+            <div class="empty-icon">◈</div>
+            <p>Aucune candidature trouvée.</p>
+            <a href="/Applications/Create" class="btn btn-primary">Ajouter une candidature</a>
+        </div>
+    }
+    else
+    {
+        <div class="app-table-wrap">
+            <table class="app-table">
+                <thead>
+                    <tr>
+                        <th>Entreprise</th>
+                        <th>Poste</th>
+                        <th>Lieu</th>
+                        <th>Date</th>
+                        <th>Salaire</th>
+                        <th>Note</th>
+                        <th>Statut</th>
+                        <th>Événement</th>
+                        <th>Teams</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var app in Model)
+                    {
+                        <tr class="app-row" data-id="@app.Id">
+                            <td class="td-company">
+                                @if (!string.IsNullOrEmpty(app.JobUrl))
+                                {
+                                    <a href="@app.JobUrl" target="_blank" class="company-link">@app.CompanyName <span class="ext-icon">↗</span></a>
+                                }
+                                else
+                                {
+                                    <span>@app.CompanyName</span>
+                                }
+                            </td>
+                            <td class="td-role">@app.JobTitle</td>
+                            <td class="td-location">@(app.Location ?? "—")</td>
+                            <td class="td-date">@app.AppliedDate.ToString("d MMM yyyy", fr)</td>
+                            <td class="td-salary">
+                                @if (app.SalaryExpectation.HasValue)
+                                {
+                                    <span>@app.SalaryExpectation.Value.ToString("N0", fr) €</span>
+                                }
+                                else
+                                {
+                                    <span class="text-muted">—</span>
+                                }
+                            </td>
+                            <td class="td-rating">
+                                @if (app.Rating is > 0)
+                                {
+                                    <span class="star-display">@(new string('★', app.Rating.Value))<span class="s-off">@(new string('★', 5 - app.Rating.Value))</span></span>
+                                }
+                                else
+                                {
+                                    <span class="text-muted">—</span>
+                                }
+                            </td>
+                            <td class="td-status">
+                                <select class="status-select status-@(app.Status.ToString().ToLower())"
+                                        onchange="quickStatus(@app.Id, this.value, this)"
+                                        data-original="@((int)app.Status)">
+                                    @foreach (ApplicationStatus s in Enum.GetValues(typeof(ApplicationStatus)))
+                                    {
+                                        if (app.Status == s)
+                                        {
+                                            <option value="@((int)s)" selected>@s.ToFrench()</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@((int)s)">@s.ToFrench()</option>
+                                        }
+                                    }
+                                </select>
+                            </td>
+                            @{
+                                var isInterview = app.Status is ApplicationStatus.EntretienRecruteur
+                                    or ApplicationStatus.EntretienTech
+                                    or ApplicationStatus.TestTechnique
+                                    or ApplicationStatus.EntretienRH;
+                                var isWaiting = app.Status is ApplicationStatus.AttenteRecruteur
+                                    or ApplicationStatus.AttenteTech
+                                    or ApplicationStatus.AttenteTest
+                                    or ApplicationStatus.AttenteRH;
+                                var isTerminal = app.Status is ApplicationStatus.Refuse
+                                    or ApplicationStatus.SansReponse;
+                            }
+                            @{
+                                var hasTeams = !string.IsNullOrEmpty(app.TeamsUrl);
+                            }
+                            @if (isTerminal)
+                            {
+                                <td class="td-interview td-interview-terminal" colspan="2">
+                                    @if (app.LastResponseDate.HasValue)
+                                    {
+                                        <span class="event-date-terminal">@app.LastResponseDate.Value.ToString("d MMM yyyy", fr)</span>
+                                    }
+                                </td>
+                            }
+                            else
+                            {
+                                <td class="td-interview" colspan="@(hasTeams ? 1 : 2)">
+                                    <input type="datetime-local"
+                                           class="interview-date-input @(!isInterview ? "interview-hidden" : "")"
+                                           value="@(app.InterviewDate?.ToString("yyyy-MM-ddTHH:mm") ?? "")"
+                                           onchange="saveInterviewDate(@app.Id, this.value)" />
+                                    @{
+                                        var showStaticDate = (isWaiting || app.Status == ApplicationStatus.AppelRecruteur) && app.InterviewDate.HasValue;
+                                    }
+                                    <span class="interview-date-past @(!showStaticDate ? "interview-hidden" : "")">@(app.InterviewDate?.ToString("d MMM yyyy", fr) ?? "")</span>
+                                </td>
+                                @if (hasTeams)
+                                {
+                                    <td class="td-teams">
+                                        <a href="@app.TeamsUrl" target="_blank" class="teams-link" title="Rejoindre la réunion Teams">📹</a>
+                                    </td>
+                                }
+                            }
+                            <td class="td-actions">
+                                @if (!string.IsNullOrEmpty(app.RefusalMailUrl))
+                                {
+                                    <a href="@app.RefusalMailUrl" target="_blank" class="action-btn action-refusal" title="Voir le mail de refus">✉</a>
+                                }
+                                <a href="/Applications/Edit/@app.Id" class="action-btn" title="Modifier">✎</a>
+                                <form method="post" action="/Applications/Delete/@app.Id"
+                                      onsubmit="return confirm('Supprimer cette candidature ?')" style="display:inline">
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="action-btn action-delete" title="Supprimer">✕</button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>
+
+@section Scripts {
+<script>
+document.getElementById('importFile').addEventListener('change', function () {
+    if (this.files.length > 0) {
+        if (confirm(`Importer "${this.files[0].name}" ? Les candidatures déjà présentes seront ignorées.`)) {
+            document.getElementById('importForm').submit();
+        } else {
+            this.value = '';
+        }
+    }
+});
+
+// Maps enum int value → CSS class name (must match C# enum order)
+const STATUS_CLASSES = {
+    0:  'candidature',
+    1:  'appelrecruteur',
+    2:  'entretienrecruteur',
+    3:  'attenterecruteur',
+    4:  'entretientech',
+    5:  'attentetech',
+    6:  'testtechnique',
+    7:  'attentetest',
+    8:  'entretienrh',
+    9:  'attenterh',
+    10: 'offre',
+    11: 'refuse',
+    12: 'sansreponse'
+};
+
+const INTERVIEW_STATUSES = new Set([2, 4, 6, 8]); // EntretienRecruteur, EntretienTech, TestTechnique, EntretienRH
+
+async function quickStatus(id, status, select) {
+    const original = select.dataset.original;
+    select.className = `status-select status-${STATUS_CLASSES[status] ?? ''}`;
+
+    // Show/hide interview date input and past-date span
+    const row = select.closest('tr');
+    const dateInput = row?.querySelector('.interview-date-input');
+    const pastSpan  = row?.querySelector('.interview-date-past');
+    if (dateInput) {
+        if (parseInt(status) === 1) { // AppelRecruteur — static read-only today
+            dateInput.classList.add('interview-hidden');
+            if (pastSpan) {
+                pastSpan.textContent = new Date().toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' });
+                pastSpan.classList.remove('interview-hidden');
+            }
+        } else if (INTERVIEW_STATUSES.has(parseInt(status))) {
+            dateInput.classList.remove('interview-hidden');
+            dateInput.value = ''; // server clears it too; force fresh date entry
+            if (pastSpan) pastSpan.classList.add('interview-hidden');
+        } else {
+            dateInput.classList.add('interview-hidden');
+            if (pastSpan) pastSpan.classList.add('interview-hidden');
+        }
+    }
+
+    try {
+        const token = document.querySelector('input[name="__RequestVerificationToken"]')?.value ?? '';
+        const fd = new FormData();
+        fd.append('id', id);
+        fd.append('status', status);
+        fd.append('__RequestVerificationToken', token);
+        const resp = await fetch('/Applications/QuickStatus', { method: 'POST', body: fd });
+        if (!resp.ok) throw new Error();
+        select.dataset.original = status;
+        setTimeout(() => location.reload(), 400);
+    } catch {
+        select.value = original;
+        select.className = `status-select status-${STATUS_CLASSES[original] ?? ''}`;
+        if (dateInput) {
+            if (parseInt(original) === 1) { dateInput.classList.add('interview-hidden'); if (pastSpan) pastSpan.classList.remove('interview-hidden'); }
+            else if (INTERVIEW_STATUSES.has(parseInt(original))) { dateInput.classList.remove('interview-hidden'); if (pastSpan) pastSpan.classList.add('interview-hidden'); }
+            else { dateInput.classList.add('interview-hidden'); if (pastSpan) pastSpan.classList.add('interview-hidden'); }
+        }
+        alert('Erreur lors de la mise à jour du statut.');
+    }
+}
+
+async function saveInterviewDate(id, dateValue) {
+    const token = document.querySelector('input[name="__RequestVerificationToken"]')?.value ?? '';
+    const fd = new FormData();
+    fd.append('id', id);
+    fd.append('interviewDate', dateValue);
+    fd.append('__RequestVerificationToken', token);
+    await fetch('/Applications/UpdateInterviewDate', { method: 'POST', body: fd });
+    location.reload();
+}
+</script>
+}

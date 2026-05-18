@@ -184,6 +184,18 @@ test('statusSortOrder: Offre < Candidature < SansReponse', () => {
   assert(statusSortOrder(STATUS.Candidature) < statusSortOrder(STATUS.SansReponse));
 });
 
+// ── formatDateFr ──────────────────────────────────────────────────────────────
+console.log('\nformatDateFr:');
+
+const { formatDateFr } = require('./app.js');
+
+test('null returns em dash', () => {
+  assertEqual(formatDateFr(null), '—');
+});
+test('empty string returns em dash', () => {
+  assertEqual(formatDateFr(''), '—');
+});
+
 // ── Summary ───────────────────────────────────────────────────────────────────
 console.log(`\n${passed} passed, ${failed} failed`);
 if (failed > 0) process.exit(1);

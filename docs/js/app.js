@@ -97,7 +97,9 @@ function sortApplications(apps, sort) {
       if (sd !== 0) return sd;
       const ai = a.interviewDate ? new Date(a.interviewDate) : new Date('9999-12-31');
       const bi = b.interviewDate ? new Date(b.interviewDate) : new Date('9999-12-31');
-      return ai - bi;
+      const id = ai - bi;
+      if (id !== 0) return id;
+      return new Date(b.appliedDate) - new Date(a.appliedDate);
     });
   }
   return copy.sort((a, b) => {

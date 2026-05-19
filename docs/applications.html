@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Candidatures — JobTracker</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiIgZmlsbD0ibm9uZSI+CiAgPHJlY3QgeD0iMyIgeT0iMTEiIHdpZHRoPSIyNiIgaGVpZ2h0PSIxNyIgcng9IjMiIGZpbGw9IiNmMGE4MzIiIG9wYWNpdHk9IjAuMiIvPgogIDxyZWN0IHg9IjMiIHk9IjExIiB3aWR0aD0iMjYiIGhlaWdodD0iMTciIHJ4PSIzIiBzdHJva2U9IiNmMGE4MzIiIHN0cm9rZS13aWR0aD0iMiIvPgogIDxwYXRoIGQ9Ik0xMSAxMVY5QzExIDcuMzQgMTIuMzQgNiAxNCA2SDE4QzE5LjY2IDYgMjEgNy4zNCAyMSA5VjExIiBzdHJva2U9IiNmMGE4MzIiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CiAgPGxpbmUgeDE9IjMiIHkxPSIyMCIgeDI9IjI5IiB5Mj0iMjAiIHN0cm9rZT0iI2YwYTgzMiIgc3Ryb2tlLXdpZHRoPSIxLjUiIG9wYWNpdHk9IjAuNCIvPgogIDxyZWN0IHg9IjE0IiB5PSIxOC41IiB3aWR0aD0iNCIgaGVpZ2h0PSIzIiByeD0iMSIgZmlsbD0iI2YwYTgzMiIvPgo8L3N2Zz4=" />
+  <link rel="stylesheet" href="./css/site.css" />
+</head>
+<body>
+<nav class="navbar">
+  <a class="navbar-brand" href="./index.html">
+    <svg class="brand-logo" width="34" height="34" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <rect x="3" y="11" width="26" height="17" rx="3" fill="#f0a832" opacity="0.15"/>
+      <rect x="3" y="11" width="26" height="17" rx="3" stroke="#f0a832" stroke-width="1.75"/>
+      <path d="M11 11V9C11 7.34 12.34 6 14 6H18C19.66 6 21 7.34 21 9V11" stroke="#f0a832" stroke-width="1.75" stroke-linecap="round"/>
+      <line x1="3" y1="20" x2="29" y2="20" stroke="#f0a832" stroke-width="1.5" opacity="0.35"/>
+      <rect x="14" y="18.5" width="4" height="3" rx="1" fill="#f0a832"/>
+    </svg>
+    <span class="brand-text">JobTracker</span>
+  </a>
+  <div class="nav-links">
+    <a href="./index.html" class="nav-link">Tableau de bord</a>
+    <a href="./applications.html" class="nav-link active">Candidatures</a>
+    <a href="./settings.html" class="nav-link">Paramètres</a>
+    <a href="./create.html" class="nav-btn">+ Nouvelle</a>
+  </div>
+</nav>
+<main class="main-content">
+  <div class="page-container">
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">Candidatures</h1>
+        <p class="page-subtitle" id="subtitle">…</p>
+      </div>
+      <div class="page-header-actions">
+        <button id="exportBtn" class="btn btn-ghost">↓ Exporter</button>
+        <label class="btn btn-ghost" style="cursor:pointer">
+          ↑ Importer
+          <input type="file" id="importFile" accept=".json" style="display:none" />
+        </label>
+        <a href="./create.html" class="btn btn-primary">+ Nouvelle candidature</a>
+      </div>
+    </div>
+
+    <div id="errorBanner" style="display:none;" class="toast toast-error"></div>
+
+    <div class="filters-bar">
+      <input type="text" id="searchInput" placeholder="Rechercher entreprise ou poste…" class="filter-input" />
+      <select id="statusFilter" class="filter-select">
+        <option value="">Tous les statuts</option>
+      </select>
+      <select id="sortSelect" class="filter-select">
+        <option value="date">Date ↓</option>
+        <option value="company">Entreprise A–Z</option>
+        <option value="status">Statut</option>
+      </select>
+      <button id="filterBtn" class="btn btn-secondary">Filtrer</button>
+      <button id="clearBtn" class="btn btn-ghost" style="display:none">Effacer</button>
+    </div>
+
+    <div id="tableWrap"></div>
+  </div>
+</main>
+<script src="./js/gist.js"></script>
+<script src="./js/app.js"></script>
+<script>
+let ALL_APPS = [];
+
+function renderTable(apps) {
+  const wrap = document.getElementById('tableWrap');
+  const total = apps.length;
+  document.getElementById('subtitle').textContent =
+    `${total} candidature${total !== 1 ? 's' : ''}`;
+
+  if (total === 0) {
+    wrap.innerHTML = `<div class="empty-state">
+      <div class="empty-icon">◈</div>
+      <p>Aucune candidature trouvée.</p>
+      <a href="./create.html" class="btn btn-primary">Ajouter une candidature</a>
+    </div>`;
+    return;
+  }
+
+  const todayDate = today();
+  const rows = apps.map(app => {
+    const cls = STATUS_CLASS[app.status];
+    const isInterview = new Set([STATUS.EntretienRecruteur, STATUS.EntretienTech,
+      STATUS.TestTechnique, STATUS.EntretienRH]).has(app.status);
+    const isWaiting = new Set([STATUS.AttenteRecruteur, STATUS.AttenteTech,
+      STATUS.AttenteTest, STATUS.AttenteRH]).has(app.status);
+    const isTerminal = app.status === STATUS.Refuse || app.status === STATUS.SansReponse;
+
+    const companyCell = app.jobUrl
+      ? `<a href="${app.jobUrl}" target="_blank" class="company-link">${app.companyName} <span class="ext-icon">↗</span></a>`
+      : app.companyName;
+
+    const salaryCell = app.salaryExpectation
+      ? `<span class="td-salary">${Number(app.salaryExpectation).toLocaleString('fr-FR')} €</span>`
+      : `<span class="text-muted">—</span>`;
+
+    const rating = app.rating || 0;
+    const ratingCell = rating > 0
+      ? `<span class="star-display">${'★'.repeat(rating)}<span class="s-off">${'★'.repeat(5 - rating)}</span></span>`
+      : `<span class="text-muted">—</span>`;
+
+    let eventCell = '';
+    if (isTerminal) {
+      const d = app.lastResponseDate ? `<span class="event-date-terminal">${formatDateFr(app.lastResponseDate)}</span>` : '';
+      eventCell = `<td class="td-interview td-interview-terminal" colspan="2">${d}</td>`;
+    } else {
+      const ivVal = app.interviewDate ? app.interviewDate.slice(0, 16) : '';
+      const showInput = isInterview;
+      const showStatic = (isWaiting || app.status === STATUS.AppelRecruteur) && app.interviewDate;
+      eventCell = `<td class="td-interview" colspan="${app.teamsUrl ? 1 : 2}">
+        <input type="datetime-local" class="interview-date-input ${showInput ? '' : 'interview-hidden'}"
+          value="${ivVal}" onchange="saveDate(${app.id}, this.value)" />
+        <span class="interview-date-past ${showStatic ? '' : 'interview-hidden'}">${app.interviewDate ? formatDateFr(app.interviewDate) : ''}</span>
+      </td>`;
+      if (app.teamsUrl) {
+        eventCell += `<td class="td-teams"><a href="${app.teamsUrl}" target="_blank" class="teams-link" title="Rejoindre Teams">📹</a></td>`;
+      }
+    }
+
+    const refusalBtn = app.refusalMailUrl
+      ? `<a href="${app.refusalMailUrl}" target="_blank" class="action-btn action-refusal" title="Voir le mail de refus">✉</a>`
+      : '';
+
+    return `<tr class="app-row" data-id="${app.id}">
+      <td class="td-company">${companyCell}</td>
+      <td class="td-role">${app.jobTitle}</td>
+      <td class="td-location">${app.location || '—'}</td>
+      <td class="td-date">${formatDateFr(app.appliedDate)}</td>
+      <td>${salaryCell}</td>
+      <td class="td-rating">${ratingCell}</td>
+      <td class="td-status">
+        <select class="status-select status-${cls}"
+          onchange="quickStatusChange(${app.id}, parseInt(this.value), this)"
+          data-original="${app.status}">
+          ${renderStatusOptions(app.status)}
+        </select>
+      </td>
+      ${eventCell}
+      <td class="td-actions">
+        ${refusalBtn}
+        <a href="./edit.html?id=${app.id}" class="action-btn" title="Modifier">✎</a>
+        <button class="action-btn action-delete" onclick="deleteApp(${app.id})" title="Supprimer">✕</button>
+      </td>
+    </tr>`;
+  }).join('');
+
+  wrap.innerHTML = `<div class="app-table-wrap"><table class="app-table">
+    <thead><tr>
+      <th>Entreprise</th><th>Poste</th><th>Lieu</th><th>Date</th>
+      <th>Salaire</th><th>Note</th><th>Statut</th><th>Événement</th><th>Actions</th>
+    </tr></thead>
+    <tbody>${rows}</tbody>
+  </table></div>`;
+}
+
+function applyFilters() {
+  const search = document.getElementById('searchInput').value.toLowerCase();
+  const statusF = document.getElementById('statusFilter').value;
+  const sort    = document.getElementById('sortSelect').value;
+  const clearBtn = document.getElementById('clearBtn');
+  clearBtn.style.display = (search || statusF) ? '' : 'none';
+
+  let filtered = ALL_APPS;
+  if (search) filtered = filtered.filter(a =>
+    a.companyName.toLowerCase().includes(search) ||
+    a.jobTitle.toLowerCase().includes(search));
+  if (statusF !== '') filtered = filtered.filter(a => a.status === parseInt(statusF));
+  renderTable(sortApplications(filtered, sort));
+}
+
+async function quickStatusChange(id, newStatus, select) {
+  const original = parseInt(select.dataset.original);
+  select.className = `status-select status-${STATUS_CLASS[newStatus] ?? ''}`;
+  const app = ALL_APPS.find(a => a.id === id);
+  if (!app) return;
+  applyQuickStatusSideEffects(app, newStatus);
+  // Update date input/display in the same row
+  const row = select.closest('tr');
+  const dateInput = row?.querySelector('.interview-date-input');
+  const pastSpan  = row?.querySelector('.interview-date-past');
+  const isInterview = new Set([STATUS.EntretienRecruteur, STATUS.EntretienTech,
+    STATUS.TestTechnique, STATUS.EntretienRH]).has(newStatus);
+  if (dateInput) {
+    if (newStatus === STATUS.AppelRecruteur) {
+      dateInput.classList.add('interview-hidden');
+      if (pastSpan) { pastSpan.textContent = formatDateFr(app.interviewDate); pastSpan.classList.remove('interview-hidden'); }
+    } else if (isInterview) {
+      dateInput.value = ''; dateInput.classList.remove('interview-hidden');
+      if (pastSpan) pastSpan.classList.add('interview-hidden');
+    } else {
+      dateInput.classList.add('interview-hidden');
+      if (pastSpan) pastSpan.classList.add('interview-hidden');
+    }
+  }
+  try {
+    await writeApplications(ALL_APPS);
+    select.dataset.original = newStatus;
+    setTimeout(() => location.reload(), 400);
+  } catch (e) {
+    showToast('Erreur lors de la mise à jour : ' + e.message, 'error');
+    app.status = original;
+    select.value = original;
+    select.className = `status-select status-${STATUS_CLASS[original] ?? ''}`;
+  }
+}
+
+async function saveDate(id, value) {
+  const app = ALL_APPS.find(a => a.id === id);
+  if (!app) return;
+  app.interviewDate = value || null;
+  app.updatedAt = new Date().toISOString();
+  try {
+    await writeApplications(ALL_APPS);
+    setTimeout(() => location.reload(), 400);
+  } catch (e) {
+    showToast('Erreur lors de la mise à jour : ' + e.message, 'error');
+  }
+}
+
+async function deleteApp(id) {
+  if (!confirm('Supprimer cette candidature ?')) return;
+  ALL_APPS = ALL_APPS.filter(a => a.id !== id);
+  try {
+    await writeApplications(ALL_APPS);
+    applyFilters();
+  } catch (e) {
+    showToast('Erreur lors de la suppression : ' + e.message, 'error');
+  }
+}
+
+function exportApps() {
+  const json = JSON.stringify(ALL_APPS, null, 2);
+  const blob = new Blob([json], { type: 'application/json' });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href = url;
+  a.download = `jobtracker-export-${new Date().toISOString().slice(0,10)}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+document.getElementById('importFile').addEventListener('change', async function () {
+  if (!this.files.length) return;
+  const file = this.files[0];
+  if (!confirm(`Importer "${file.name}" ? Les candidatures déjà présentes seront ignorées.`)) {
+    this.value = ''; return;
+  }
+  try {
+    const text = await file.text();
+    const imported = JSON.parse(text);
+    if (!Array.isArray(imported)) throw new Error('Format invalide');
+    const existingIds = new Set(ALL_APPS.map(a => a.id));
+    let added = 0, skipped = 0;
+    for (const app of imported) {
+      if (existingIds.has(app.id)) { skipped++; continue; }
+      app.updatedAt = new Date().toISOString();
+      ALL_APPS.push(app);
+      added++;
+    }
+    await writeApplications(ALL_APPS);
+    showToast(skipped > 0
+      ? `${added} importée(s), ${skipped} ignorée(s) (déjà présentes).`
+      : `${added} candidature(s) importée(s) avec succès.`);
+    applyFilters();
+  } catch (e) {
+    showToast('Fichier JSON invalide ou erreur : ' + e.message, 'error');
+  }
+  this.value = '';
+});
+
+// Populate status filter dropdown
+const statusFilterEl = document.getElementById('statusFilter');
+Object.entries(STATUS_LABEL).forEach(([val, label]) => {
+  const opt = document.createElement('option');
+  opt.value = val; opt.textContent = label;
+  statusFilterEl.appendChild(opt);
+});
+
+document.getElementById('filterBtn').addEventListener('click', applyFilters);
+document.getElementById('clearBtn').addEventListener('click', () => {
+  document.getElementById('searchInput').value = '';
+  document.getElementById('statusFilter').value = '';
+  applyFilters();
+});
+document.getElementById('searchInput').addEventListener('keydown', e => { if (e.key === 'Enter') applyFilters(); });
+document.getElementById('exportBtn').addEventListener('click', exportApps);
+
+(async () => {
+  redirectIfNoSettings();
+  try {
+    ALL_APPS = await readApplications();
+  } catch (e) {
+    const b = document.getElementById('errorBanner');
+    b.style.display = ''; b.innerHTML =
+      `✕ Impossible de lire le Gist : ${e.message}. <a href="./settings.html">Vérifier les paramètres →</a>`;
+    document.getElementById('subtitle').textContent = '–';
+    return;
+  }
+  const { apps, changed } = applyAutoTransitions(ALL_APPS);
+  ALL_APPS = apps;
+  if (changed) { try { await writeApplications(ALL_APPS); } catch (_) {} }
+  applyFilters();
+})();
+</script>
+</body>
+</html>

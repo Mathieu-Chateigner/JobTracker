@@ -1,71 +1,48 @@
 # JobTracker
 
-A clean ASP.NET Core 9 MVC app to track your job applications, with automatic
-job info extraction from Indeed (and other job sites) via a real headless browser.
+A personal French-language job application tracker. Runs entirely in the browser — no server, no database, no install. Data is stored in a private GitHub Gist.
 
-## Setup
+**Live:** https://mathieu-chateigner.github.io/JobTracker/
 
-### Requirements
-- .NET 9 SDK — https://dotnet.microsoft.com/download
-- No SQL Server needed — uses SQLite (zero config, file-based)
+## First-time setup
 
-### First-time setup
+1. Create a GitHub Personal Access Token with the **`gist`** scope only → [github.com/settings/tokens](https://github.com/settings/tokens/new?scopes=gist&description=JobTracker)
+2. Open the app and go to **Paramètres**
+3. Paste your token, click **Créer un nouveau Gist**, then **Enregistrer**
 
-```bash
-cd JobTracker
-
-# 1. Restore packages
-dotnet restore
-
-# 2. Install Playwright's Chromium browser (one-time, ~120MB)
-dotnet build
-pwsh bin/Debug/net9.0/playwright.ps1 install chromium
-# If you don't have PowerShell, use:
-# node node_modules/.bin/playwright install chromium
-
-# 3. Run
-dotnet run
-```
-
-Open https://localhost:5001 in your browser.
-The SQLite database (jobtracker.db) is created automatically on first run.
-
-### Playwright install note
-If `pwsh` is not found, you can also run:
-```
-dotnet run  # it will fail with a clear message pointing to the install command
-```
-Playwright will tell you exactly what to run to install the browser.
+That's it. The same PAT + Gist ID on any other device or browser gives you access to the same data.
 
 ## Features
-- **Dashboard** — stats (total, in-progress, offers, rejections) + breakdown bars + recent list
-- **Applications list** — search, filter by status, sort
-- **URL auto-fill** — paste an Indeed (or any job site) URL, a headless Chromium browser
-  opens it and extracts job title, company, and location automatically
-- **Add / Edit / Delete** applications
-- **Quick status update** inline in the list
+
+- **Tableau de bord** — stats, status breakdown, recent applications
+- **Candidatures** — searchable/filterable list with inline status and interview date editing
+- **Ajout rapide** — paste a job URL to auto-fill title and company via a CORS proxy
+- **Export / Import** — full JSON backup, import skips duplicate IDs
+- **Auto-transitions** — past interview dates automatically advance to the corresponding waiting status; applications with no response after 21 days become *Sans réponse*
+- **Google Maps autocomplete** — optional, configure API key in Paramètres
 
 ## Status flow
-Applied → Phone Screen → Interview → Technical Test → Offer
-                                  ↘ Rejected / Withdrawn / No Response
 
-## Structure
 ```
-JobTracker/
-├── Controllers/
-│   ├── HomeController.cs
-│   └── ApplicationsController.cs   ← includes FetchJobInfo endpoint
-├── Data/AppDbContext.cs
-├── Models/JobApplication.cs
-├── Services/
-│   └── JobScraperService.cs        ← Playwright-based scraper
-├── Views/
-│   ├── Home/Index.cshtml           ← Dashboard
-│   ├── Applications/
-│   │   ├── Index.cshtml
-│   │   ├── Create.cshtml           ← URL import panel
-│   │   ├── Edit.cshtml
-│   │   └── _Form.cshtml
-│   └── Shared/_Layout.cshtml
-└── wwwroot/css/site.css
+Candidature → Appel recruteur → Entretien recruteur → En attente (recruteur)
+                                                     → Entretien tech      → En attente (tech)
+                                                     → Test technique      → En attente (test)
+                                                     → Entretien RH        → En attente (RH)
+                                                                           → Offre
+                                                                           → Refusé
+                                                     → Sans réponse
+```
+
+## Local development
+
+No build step. Serve the repo root with any static server:
+
+```bash
+npx serve .
+```
+
+Run unit tests (pure logic, no browser):
+
+```bash
+node js/app.test.js
 ```

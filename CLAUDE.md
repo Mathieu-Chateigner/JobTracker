@@ -15,6 +15,12 @@ dotnet run                  # serves at https://localhost:5001
 powershell bin/Debug/net9.0/playwright.ps1 install chromium
 ```
 
+## GitHub Pages (static version)
+Served from `docs/` — configure GitHub Pages in repo settings to use branch `main`, folder `/docs`.
+One-time setup per device: visit `/settings.html`, enter your GitHub PAT (gist scope) and Gist ID.
+Data migration from .NET app: Export → JSON → Import in the static app.
+Tests: `node docs/js/app.test.js`
+
 ## Stack
 - **Framework**: ASP.NET Core 9 MVC, .NET 9
 - **Database**: SQLite via EF Core 9 (`jobtracker.db`, auto-created on startup)

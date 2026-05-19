@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Modifier la candidature — JobTracker</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiIgZmlsbD0ibm9uZSI+CiAgPHJlY3QgeD0iMyIgeT0iMTEiIHdpZHRoPSIyNiIgaGVpZ2h0PSIxNyIgcng9IjMiIGZpbGw9IiNmMGE4MzIiIG9wYWNpdHk9IjAuMiIvPgogIDxyZWN0IHg9IjMiIHk9IjExIiB3aWR0aD0iMjYiIGhlaWdodD0iMTciIHJ4PSIzIiBzdHJva2U9IiNmMGE4MzIiIHN0cm9rZS13aWR0aD0iMiIvPgogIDxwYXRoIGQ9Ik0xMSAxMVY5QzExIDcuMzQgMTIuMzQgNiAxNCA2SDE4QzE5LjY2IDYgMjEgNy4zNCAyMSA5VjExIiBzdHJva2U9IiNmMGE4MzIiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CiAgPGxpbmUgeDE9IjMiIHkxPSIyMCIgeDI9IjI5IiB5Mj0iMjAiIHN0cm9rZT0iI2YwYTgzMiIgc3Ryb2tlLXdpZHRoPSIxLjUiIG9wYWNpdHk9IjAuNCIvPgogIDxyZWN0IHg9IjE0IiB5PSIxOC41IiB3aWR0aD0iNCIgaGVpZ2h0PSIzIiByeD0iMSIgZmlsbD0iI2YwYTgzMiIvPgo8L3N2Zz4=" />
+  <link rel="stylesheet" href="./css/site.css" />
+</head>
+<body>
+<nav class="navbar">
+  <a class="navbar-brand" href="./index.html">
+    <svg class="brand-logo" width="34" height="34" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <rect x="3" y="11" width="26" height="17" rx="3" fill="#f0a832" opacity="0.15"/>
+      <rect x="3" y="11" width="26" height="17" rx="3" stroke="#f0a832" stroke-width="1.75"/>
+      <path d="M11 11V9C11 7.34 12.34 6 14 6H18C19.66 6 21 7.34 21 9V11" stroke="#f0a832" stroke-width="1.75" stroke-linecap="round"/>
+      <line x1="3" y1="20" x2="29" y2="20" stroke="#f0a832" stroke-width="1.5" opacity="0.35"/>
+      <rect x="14" y="18.5" width="4" height="3" rx="1" fill="#f0a832"/>
+    </svg>
+    <span class="brand-text">JobTracker</span>
+  </a>
+  <div class="nav-links">
+    <a href="./index.html" class="nav-link">Tableau de bord</a>
+    <a href="./applications.html" class="nav-link">Candidatures</a>
+    <a href="./settings.html" class="nav-link">Paramètres</a>
+    <a href="./create.html" class="nav-btn">+ Nouvelle</a>
+  </div>
+</nav>
+<main class="main-content">
+  <div class="page-container page-narrow">
+    <div class="page-header">
+      <h1 class="page-title" id="pageTitle">Modifier la candidature</h1>
+    </div>
+    <form id="appForm">
+      <div class="form-grid">
+        <div class="form-group form-col-2">
+          <label class="form-label">Entreprise *</label>
+          <input type="text" id="companyName" class="form-input" required maxlength="200" />
+        </div>
+        <div class="form-group form-col-2">
+          <label class="form-label">Poste *</label>
+          <input type="text" id="jobTitle" class="form-input" required maxlength="200" />
+        </div>
+        <div class="form-group form-col-2">
+          <label class="form-label">Lieu</label>
+          <div class="location-wrap">
+            <input type="text" id="locationInput" class="form-input" autocomplete="off" maxlength="200" />
+            <span class="location-pin">📍</span>
+          </div>
+        </div>
+        <div class="form-group form-col-2">
+          <label class="form-label">Date de candidature *</label>
+          <input type="date" id="appliedDate" class="form-input" required />
+        </div>
+        <div class="form-group form-col-full">
+          <label class="form-label">URL de l'offre</label>
+          <input type="url" id="jobUrl" class="form-input" maxlength="500" />
+        </div>
+        <div class="form-group form-col-2">
+          <label class="form-label">Statut</label>
+          <select id="statusSelect" class="form-select"></select>
+        </div>
+        <div class="form-group form-col-2" id="interviewDateGroup">
+          <label class="form-label">Date d'entretien / deadline</label>
+          <input type="datetime-local" id="interviewDate" class="form-input" />
+        </div>
+        <div class="form-group form-col-2">
+          <label class="form-label">Date de dernière réponse</label>
+          <input type="date" id="lastResponseDate" class="form-input" />
+        </div>
+        <div class="form-group form-col-2">
+          <label class="form-label">Salaire souhaité (€)</label>
+          <input type="number" id="salaryExpectation" class="form-input" min="0" max="9999999" />
+        </div>
+        <div class="form-group form-col-2">
+          <label class="form-label">Note recruteur / entreprise</label>
+          <div class="star-picker">
+            <input type="hidden" id="ratingInput" value="" />
+            <button type="button" class="star-btn">★</button>
+            <button type="button" class="star-btn">★</button>
+            <button type="button" class="star-btn">★</button>
+            <button type="button" class="star-btn">★</button>
+            <button type="button" class="star-btn">★</button>
+          </div>
+        </div>
+        <div class="form-group form-col-2">
+          <label class="form-label">URL du mail de refus</label>
+          <input type="url" id="refusalMailUrl" class="form-input" maxlength="500" />
+        </div>
+        <div class="form-group form-col-2">
+          <label class="form-label">Lien Teams</label>
+          <input type="url" id="teamsUrl" class="form-input" maxlength="500" />
+        </div>
+        <div class="form-group form-col-full">
+          <label class="form-label">Notes</label>
+          <textarea id="notes" class="form-input form-textarea" rows="4" maxlength="2000"></textarea>
+        </div>
+      </div>
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary">Enregistrer</button>
+        <a href="./applications.html" class="btn btn-ghost">Annuler</a>
+        <button type="button" id="deleteBtn" class="btn btn-danger" style="margin-left:auto;">Supprimer</button>
+      </div>
+    </form>
+  </div>
+</main>
+<script src="./js/gist.js"></script>
+<script src="./js/app.js"></script>
+<script>
+redirectIfNoSettings();
+
+const appId = parseInt(new URLSearchParams(window.location.search).get('id'));
+if (!appId) window.location.href = './applications.html';
+
+const INTERVIEW_STATUSES_SET = new Set([STATUS.EntretienRecruteur, STATUS.EntretienTech,
+  STATUS.TestTechnique, STATUS.EntretienRH]);
+
+function toggleInterviewDate() {
+  const s = parseInt(document.getElementById('statusSelect').value);
+  document.getElementById('interviewDateGroup').style.display =
+    INTERVIEW_STATUSES_SET.has(s) ? '' : 'none';
+}
+
+// Star rating widget (same as create.html)
+(function () {
+  const input = document.getElementById('ratingInput');
+  const btns  = Array.from(document.querySelectorAll('.star-btn'));
+  function highlight(n) { btns.forEach((b, i) => b.classList.toggle('lit', i < n)); }
+  highlight(0);
+  btns.forEach((btn, idx) => {
+    btn.addEventListener('mouseenter', () => highlight(idx + 1));
+    btn.addEventListener('mouseleave', () => highlight(parseInt(input.value) || 0));
+    btn.addEventListener('click', () => {
+      const cur = parseInt(input.value) || 0;
+      const next = cur === idx + 1 ? 0 : idx + 1;
+      input.value = next || '';
+      highlight(next);
+    });
+  });
+})();
+
+let ALL_APPS = [];
+
+(async () => {
+  try {
+    ALL_APPS = await readApplications();
+  } catch (e) {
+    showToast('Impossible de charger : ' + e.message, 'error');
+    return;
+  }
+
+  const app = ALL_APPS.find(a => a.id === appId);
+  if (!app) { showToast('Candidature introuvable.', 'error'); return; }
+
+  document.getElementById('pageTitle').textContent = `Modifier — ${app.companyName}`;
+
+  // Populate status select
+  const statusSelectEl = document.getElementById('statusSelect');
+  statusSelectEl.innerHTML = renderStatusOptions(app.status);
+  statusSelectEl.addEventListener('change', toggleInterviewDate);
+
+  // Fill form fields
+  document.getElementById('companyName').value       = app.companyName || '';
+  document.getElementById('jobTitle').value          = app.jobTitle || '';
+  document.getElementById('locationInput').value     = app.location || '';
+  document.getElementById('appliedDate').value       = (app.appliedDate || '').split('T')[0];
+  document.getElementById('jobUrl').value            = app.jobUrl || '';
+  document.getElementById('interviewDate').value     = app.interviewDate ? app.interviewDate.slice(0, 16) : '';
+  document.getElementById('lastResponseDate').value  = app.lastResponseDate ? app.lastResponseDate.split('T')[0] : '';
+  document.getElementById('salaryExpectation').value = app.salaryExpectation ?? '';
+  document.getElementById('refusalMailUrl').value    = app.refusalMailUrl || '';
+  document.getElementById('teamsUrl').value          = app.teamsUrl || '';
+  document.getElementById('notes').value             = app.notes || '';
+
+  const ratingInput = document.getElementById('ratingInput');
+  ratingInput.value = app.rating ?? '';
+  const starBtns = Array.from(document.querySelectorAll('.star-btn'));
+  const n = parseInt(ratingInput.value) || 0;
+  starBtns.forEach((b, i) => b.classList.toggle('lit', i < n));
+
+  toggleInterviewDate();
+
+  document.getElementById('appForm').addEventListener('submit', async e => {
+    e.preventDefault();
+    const submitBtn = e.target.querySelector('[type=submit]');
+    submitBtn.disabled = true; submitBtn.textContent = 'Enregistrement…';
+    try {
+      const idx = ALL_APPS.findIndex(a => a.id === appId);
+      ALL_APPS[idx] = {
+        ...app,
+        companyName:       document.getElementById('companyName').value.trim(),
+        jobTitle:          document.getElementById('jobTitle').value.trim(),
+        location:          document.getElementById('locationInput').value.trim() || null,
+        appliedDate:       document.getElementById('appliedDate').value + 'T00:00:00',
+        jobUrl:            document.getElementById('jobUrl').value.trim() || null,
+        status:            parseInt(statusSelectEl.value),
+        interviewDate:     document.getElementById('interviewDate').value || null,
+        lastResponseDate:  document.getElementById('lastResponseDate').value || null,
+        salaryExpectation: document.getElementById('salaryExpectation').value
+                             ? parseInt(document.getElementById('salaryExpectation').value) : null,
+        rating:            document.getElementById('ratingInput').value
+                             ? parseInt(document.getElementById('ratingInput').value) : null,
+        refusalMailUrl:    document.getElementById('refusalMailUrl').value.trim() || null,
+        teamsUrl:          document.getElementById('teamsUrl').value.trim() || null,
+        notes:             document.getElementById('notes').value.trim() || null,
+        updatedAt:         new Date().toISOString(),
+      };
+      await writeApplications(ALL_APPS);
+      window.location.href = './applications.html';
+    } catch (err) {
+      showToast('Erreur lors de l\'enregistrement : ' + err.message, 'error');
+      submitBtn.disabled = false; submitBtn.textContent = 'Enregistrer';
+    }
+  });
+
+  document.getElementById('deleteBtn').addEventListener('click', async () => {
+    if (!confirm(`Supprimer la candidature chez ${app.companyName} ?`)) return;
+    try {
+      await writeApplications(ALL_APPS.filter(a => a.id !== appId));
+      window.location.href = './applications.html';
+    } catch (err) {
+      showToast('Erreur lors de la suppression : ' + err.message, 'error');
+    }
+  });
+
+  maybeLoadGoogleMaps();
+})();
+</script>
+</body>
+</html>

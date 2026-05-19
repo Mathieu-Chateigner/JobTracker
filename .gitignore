@@ -1,24 +1,15 @@
-## Build output
+## IDE
+.vs/
+.vscode/
+
+## .NET build output and project files
 bin/
 obj/
-
-## Database WAL temp files (the .db itself is tracked)
+*.sln
+*.csproj
+*.db
 *.db-shm
 *.db-wal
-
-## Uploaded user files
-wwwroot/cv/
-
-## Stray source copies accidentally placed in wwwroot
-wwwroot/Controllers/
-wwwroot/Data/
-wwwroot/Models/
-wwwroot/Services/
-wwwroot/Views/
-wwwroot/wwwroot/
-wwwroot/JobTracker.csproj
-wwwroot/Program.cs
-wwwroot/README.md
 
 ## Artifacts
 *.zip
@@ -26,10 +17,6 @@ jobtracker-export.json
 
 ## Claude Code settings
 .claude/
-
-## User secrets / local overrides (keep appsettings.Development.json tracked)
-appsettings.*.local.json
-secrets.json
 
 ## OS
 .DS_Store

@@ -23,6 +23,7 @@ obj/
 ## Artifacts
 *.zip
 jobtracker-export.json
+applications.json
 
 ## Claude Code settings
 .claude/

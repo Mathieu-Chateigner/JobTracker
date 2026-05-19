@@ -11,7 +11,7 @@
 </head>
 <body>
 <nav class="navbar">
-  <a class="navbar-brand" href="./index.html">
+  <a class="navbar-brand" href="../index.html">
     <svg class="brand-logo" width="34" height="34" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
       <rect x="3" y="11" width="26" height="17" rx="3" fill="#f0a832" opacity="0.15"/>
       <rect x="3" y="11" width="26" height="17" rx="3" stroke="#f0a832" stroke-width="1.75"/>
@@ -22,7 +22,7 @@
     <span class="brand-text">JobTracker</span>
   </a>
   <div class="nav-links">
-    <a href="./index.html" class="nav-link">Tableau de bord</a>
+    <a href="../index.html" class="nav-link">Tableau de bord</a>
     <a href="./applications.html" class="nav-link">Candidatures</a>
     <a href="./settings.html" class="nav-link active">Paramètres</a>
     <a href="./create.html" class="nav-btn">+ Nouvelle</a>
@@ -66,7 +66,7 @@
       <div class="form-actions">
         <button type="submit" class="btn btn-primary">Enregistrer</button>
         <button type="button" id="testConnBtn" class="btn btn-secondary">Tester la connexion</button>
-        <a href="./index.html" class="btn btn-ghost">Annuler</a>
+        <a href="../index.html" class="btn btn-ghost">Annuler</a>
       </div>
       <div id="connStatus" style="margin-top:1rem;"></div>
     </form>
@@ -113,7 +113,7 @@
     const gmaps  = document.getElementById('gmapsKeyInput').value.trim();
     if (!pat || !gistId) { alert('Le token et l\'ID du Gist sont obligatoires.'); return; }
     saveSettings(pat, gistId, gmaps);
-    window.location.href = './index.html';
+    window.location.href = '../index.html';
   });
 
   function showStatus(msg, ok) {

@@ -2,7 +2,16 @@
 .vs/
 .vscode/
 
-## .NET build output and project files
+## .NET source and project files
+Controllers/
+Data/
+Models/
+Services/
+Views/
+wwwroot/
+Properties/
+Program.cs
+appsettings*.json
 bin/
 obj/
 *.sln

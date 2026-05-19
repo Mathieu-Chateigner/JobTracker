@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Candidatures â€” JobTracker</title>
+  <title>Candidatures — JobTracker</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiIgZmlsbD0ibm9uZSI+CiAgPHJlY3QgeD0iMyIgeT0iMTEiIHdpZHRoPSIyNiIgaGVpZ2h0PSIxNyIgcng9IjMiIGZpbGw9IiNmMGE4MzIiIG9wYWNpdHk9IjAuMiIvPgogIDxyZWN0IHg9IjMiIHk9IjExIiB3aWR0aD0iMjYiIGhlaWdodD0iMTciIHJ4PSIzIiBzdHJva2U9IiNmMGE4MzIiIHN0cm9rZS13aWR0aD0iMiIvPgogIDxwYXRoIGQ9Ik0xMSAxMVY5QzExIDcuMzQgMTIuMzQgNiAxNCA2SDE4QzE5LjY2IDYgMjEgNy4zNCAyMSA5VjExIiBzdHJva2U9IiNmMGE4MzIiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CiAgPGxpbmUgeDE9IjMiIHkxPSIyMCIgeDI9IjI5IiB5Mj0iMjAiIHN0cm9rZT0iI2YwYTgzMiIgc3Ryb2tlLXdpZHRoPSIxLjUiIG9wYWNpdHk9IjAuNCIvPgogIDxyZWN0IHg9IjE0IiB5PSIxOC41IiB3aWR0aD0iNCIgaGVpZ2h0PSIzIiByeD0iMSIgZmlsbD0iI2YwYTgzMiIvPgo8L3N2Zz4=" />
@@ -24,7 +24,7 @@
   <div class="nav-links">
     <a href="./index.html" class="nav-link">Tableau de bord</a>
     <a href="./applications.html" class="nav-link active">Candidatures</a>
-    <a href="./settings.html" class="nav-link">ParamÃ¨tres</a>
+    <a href="./settings.html" class="nav-link">Paramètres</a>
     <a href="./create.html" class="nav-btn">+ Nouvelle</a>
   </div>
 </nav>
@@ -33,12 +33,12 @@
     <div class="page-header">
       <div>
         <h1 class="page-title">Candidatures</h1>
-        <p class="page-subtitle" id="subtitle">â€¦</p>
+        <p class="page-subtitle" id="subtitle">…</p>
       </div>
       <div class="page-header-actions">
-        <button id="exportBtn" class="btn btn-ghost">â†“ Exporter</button>
+        <button id="exportBtn" class="btn btn-ghost">↓ Exporter</button>
         <label class="btn btn-ghost" style="cursor:pointer">
-          â†‘ Importer
+          ↑ Importer
           <input type="file" id="importFile" accept=".json" style="display:none" />
         </label>
         <a href="./create.html" class="btn btn-primary">+ Nouvelle candidature</a>
@@ -48,13 +48,13 @@
     <div id="errorBanner" style="display:none;" class="toast toast-error"></div>
 
     <div class="filters-bar">
-      <input type="text" id="searchInput" placeholder="Rechercher entreprise ou posteâ€¦" class="filter-input" />
+      <input type="text" id="searchInput" placeholder="Rechercher entreprise ou poste…" class="filter-input" />
       <select id="statusFilter" class="filter-select">
         <option value="">Tous les statuts</option>
       </select>
       <select id="sortSelect" class="filter-select">
-        <option value="date">Date â†“</option>
-        <option value="company">Entreprise Aâ€“Z</option>
+        <option value="date">Date ↓</option>
+        <option value="company">Entreprise A–Z</option>
         <option value="status">Statut</option>
       </select>
       <button id="filterBtn" class="btn btn-secondary">Filtrer</button>
@@ -77,8 +77,8 @@ function renderTable(apps) {
 
   if (total === 0) {
     wrap.innerHTML = `<div class="empty-state">
-      <div class="empty-icon">â—ˆ</div>
-      <p>Aucune candidature trouvÃ©e.</p>
+      <div class="empty-icon">◈</div>
+      <p>Aucune candidature trouvée.</p>
       <a href="./create.html" class="btn btn-primary">Ajouter une candidature</a>
     </div>`;
     return;
@@ -94,17 +94,17 @@ function renderTable(apps) {
     const isTerminal = app.status === STATUS.Refuse || app.status === STATUS.SansReponse;
 
     const companyCell = app.jobUrl
-      ? `<a href="${app.jobUrl}" target="_blank" class="company-link">${app.companyName} <span class="ext-icon">â†—</span></a>`
+      ? `<a href="${app.jobUrl}" target="_blank" class="company-link">${app.companyName} <span class="ext-icon">↗</span></a>`
       : app.companyName;
 
     const salaryCell = app.salaryExpectation
-      ? `<span class="td-salary">${Number(app.salaryExpectation).toLocaleString('fr-FR')} â‚¬</span>`
-      : `<span class="text-muted">â€”</span>`;
+      ? `<span class="td-salary">${Number(app.salaryExpectation).toLocaleString('fr-FR')} €</span>`
+      : `<span class="text-muted">—</span>`;
 
     const rating = app.rating || 0;
     const ratingCell = rating > 0
-      ? `<span class="star-display">${'â˜…'.repeat(rating)}<span class="s-off">${'â˜…'.repeat(5 - rating)}</span></span>`
-      : `<span class="text-muted">â€”</span>`;
+      ? `<span class="star-display">${'★'.repeat(rating)}<span class="s-off">${'★'.repeat(5 - rating)}</span></span>`
+      : `<span class="text-muted">—</span>`;
 
     let eventCell = '';
     if (isTerminal) {
@@ -120,18 +120,18 @@ function renderTable(apps) {
         <span class="interview-date-past ${showStatic ? '' : 'interview-hidden'}">${app.interviewDate ? formatDateFr(app.interviewDate) : ''}</span>
       </td>`;
       if (app.teamsUrl) {
-        eventCell += `<td class="td-teams"><a href="${app.teamsUrl}" target="_blank" class="teams-link" title="Rejoindre Teams">ðŸ“¹</a></td>`;
+        eventCell += `<td class="td-teams"><a href="${app.teamsUrl}" target="_blank" class="teams-link" title="Rejoindre Teams">📹</a></td>`;
       }
     }
 
     const refusalBtn = app.refusalMailUrl
-      ? `<a href="${app.refusalMailUrl}" target="_blank" class="action-btn action-refusal" title="Voir le mail de refus">âœ‰</a>`
+      ? `<a href="${app.refusalMailUrl}" target="_blank" class="action-btn action-refusal" title="Voir le mail de refus">✉</a>`
       : '';
 
     return `<tr class="app-row" data-id="${app.id}">
       <td class="td-company">${companyCell}</td>
       <td class="td-role">${app.jobTitle}</td>
-      <td class="td-location">${app.location || 'â€”'}</td>
+      <td class="td-location">${app.location || '—'}</td>
       <td class="td-date">${formatDateFr(app.appliedDate)}</td>
       <td>${salaryCell}</td>
       <td class="td-rating">${ratingCell}</td>
@@ -145,8 +145,8 @@ function renderTable(apps) {
       ${eventCell}
       <td class="td-actions">
         ${refusalBtn}
-        <a href="./edit.html?id=${app.id}" class="action-btn" title="Modifier">âœŽ</a>
-        <button class="action-btn action-delete" onclick="deleteApp(${app.id})" title="Supprimer">âœ•</button>
+        <a href="./edit.html?id=${app.id}" class="action-btn" title="Modifier">✎</a>
+        <button class="action-btn action-delete" onclick="deleteApp(${app.id})" title="Supprimer">✕</button>
       </td>
     </tr>`;
   }).join('');
@@ -154,7 +154,7 @@ function renderTable(apps) {
   wrap.innerHTML = `<div class="app-table-wrap"><table class="app-table">
     <thead><tr>
       <th>Entreprise</th><th>Poste</th><th>Lieu</th><th>Date</th>
-      <th>Salaire</th><th>Note</th><th>Statut</th><th>Ã‰vÃ©nement</th><th>Actions</th>
+      <th>Salaire</th><th>Note</th><th>Statut</th><th>Événement</th><th>Actions</th>
     </tr></thead>
     <tbody>${rows}</tbody>
   </table></div>`;
@@ -204,7 +204,7 @@ async function quickStatusChange(id, newStatus, select) {
     select.dataset.original = newStatus;
     setTimeout(() => location.reload(), 400);
   } catch (e) {
-    showToast('Erreur lors de la mise Ã  jour : ' + e.message, 'error');
+    showToast('Erreur lors de la mise à jour : ' + e.message, 'error');
     app.status = original;
     select.value = original;
     select.className = `status-select status-${STATUS_CLASS[original] ?? ''}`;
@@ -220,7 +220,7 @@ async function saveDate(id, value) {
     await writeApplications(ALL_APPS);
     setTimeout(() => location.reload(), 400);
   } catch (e) {
-    showToast('Erreur lors de la mise Ã  jour : ' + e.message, 'error');
+    showToast('Erreur lors de la mise à jour : ' + e.message, 'error');
   }
 }
 
@@ -249,7 +249,7 @@ function exportApps() {
 document.getElementById('importFile').addEventListener('change', async function () {
   if (!this.files.length) return;
   const file = this.files[0];
-  if (!confirm(`Importer "${file.name}" ? Les candidatures dÃ©jÃ  prÃ©sentes seront ignorÃ©es.`)) {
+  if (!confirm(`Importer "${file.name}" ? Les candidatures déjà présentes seront ignorées.`)) {
     this.value = ''; return;
   }
   try {
@@ -266,8 +266,8 @@ document.getElementById('importFile').addEventListener('change', async function 
     }
     await writeApplications(ALL_APPS);
     showToast(skipped > 0
-      ? `${added} importÃ©e(s), ${skipped} ignorÃ©e(s) (dÃ©jÃ  prÃ©sentes).`
-      : `${added} candidature(s) importÃ©e(s) avec succÃ¨s.`);
+      ? `${added} importée(s), ${skipped} ignorée(s) (déjà présentes).`
+      : `${added} candidature(s) importée(s) avec succès.`);
     applyFilters();
   } catch (e) {
     showToast('Fichier JSON invalide ou erreur : ' + e.message, 'error');
@@ -299,8 +299,8 @@ document.getElementById('exportBtn').addEventListener('click', exportApps);
   } catch (e) {
     const b = document.getElementById('errorBanner');
     b.style.display = ''; b.innerHTML =
-      `âœ• Impossible de lire le Gist : ${e.message}. <a href="./settings.html">VÃ©rifier les paramÃ¨tres â†’</a>`;
-    document.getElementById('subtitle').textContent = 'â€“';
+      `✕ Impossible de lire le Gist : ${e.message}. <a href="./settings.html">Vérifier les paramètres →</a>`;
+    document.getElementById('subtitle').textContent = '–';
     return;
   }
   const { apps, changed } = applyAutoTransitions(ALL_APPS);

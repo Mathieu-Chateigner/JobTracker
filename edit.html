@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Modifier la candidature â€” JobTracker</title>
+  <title>Modifier la candidature — JobTracker</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiIgZmlsbD0ibm9uZSI+CiAgPHJlY3QgeD0iMyIgeT0iMTEiIHdpZHRoPSIyNiIgaGVpZ2h0PSIxNyIgcng9IjMiIGZpbGw9IiNmMGE4MzIiIG9wYWNpdHk9IjAuMiIvPgogIDxyZWN0IHg9IjMiIHk9IjExIiB3aWR0aD0iMjYiIGhlaWdodD0iMTciIHJ4PSIzIiBzdHJva2U9IiNmMGE4MzIiIHN0cm9rZS13aWR0aD0iMiIvPgogIDxwYXRoIGQ9Ik0xMSAxMVY5QzExIDcuMzQgMTIuMzQgNiAxNCA2SDE4QzE5LjY2IDYgMjEgNy4zNCAyMSA5VjExIiBzdHJva2U9IiNmMGE4MzIiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CiAgPGxpbmUgeDE9IjMiIHkxPSIyMCIgeDI9IjI5IiB5Mj0iMjAiIHN0cm9rZT0iI2YwYTgzMiIgc3Ryb2tlLXdpZHRoPSIxLjUiIG9wYWNpdHk9IjAuNCIvPgogIDxyZWN0IHg9IjE0IiB5PSIxOC41IiB3aWR0aD0iNCIgaGVpZ2h0PSIzIiByeD0iMSIgZmlsbD0iI2YwYTgzMiIvPgo8L3N2Zz4=" />
@@ -24,7 +24,7 @@
   <div class="nav-links">
     <a href="./index.html" class="nav-link">Tableau de bord</a>
     <a href="./applications.html" class="nav-link">Candidatures</a>
-    <a href="./settings.html" class="nav-link">ParamÃ¨tres</a>
+    <a href="./settings.html" class="nav-link">Paramètres</a>
     <a href="./create.html" class="nav-btn">+ Nouvelle</a>
   </div>
 </nav>
@@ -47,7 +47,7 @@
           <label class="form-label">Lieu</label>
           <div class="location-wrap">
             <input type="text" id="locationInput" class="form-input" autocomplete="off" maxlength="200" />
-            <span class="location-pin">ðŸ“</span>
+            <span class="location-pin">📍</span>
           </div>
         </div>
         <div class="form-group form-col-2">
@@ -67,22 +67,22 @@
           <input type="datetime-local" id="interviewDate" class="form-input" />
         </div>
         <div class="form-group form-col-2">
-          <label class="form-label">Date de derniÃ¨re rÃ©ponse</label>
+          <label class="form-label">Date de dernière réponse</label>
           <input type="date" id="lastResponseDate" class="form-input" />
         </div>
         <div class="form-group form-col-2">
-          <label class="form-label">Salaire souhaitÃ© (â‚¬)</label>
+          <label class="form-label">Salaire souhaité (€)</label>
           <input type="number" id="salaryExpectation" class="form-input" min="0" max="9999999" />
         </div>
         <div class="form-group form-col-2">
           <label class="form-label">Note recruteur / entreprise</label>
           <div class="star-picker">
             <input type="hidden" id="ratingInput" value="" />
-            <button type="button" class="star-btn">â˜…</button>
-            <button type="button" class="star-btn">â˜…</button>
-            <button type="button" class="star-btn">â˜…</button>
-            <button type="button" class="star-btn">â˜…</button>
-            <button type="button" class="star-btn">â˜…</button>
+            <button type="button" class="star-btn">★</button>
+            <button type="button" class="star-btn">★</button>
+            <button type="button" class="star-btn">★</button>
+            <button type="button" class="star-btn">★</button>
+            <button type="button" class="star-btn">★</button>
           </div>
         </div>
         <div class="form-group form-col-2">
@@ -154,7 +154,7 @@ let ALL_APPS = [];
   const app = ALL_APPS.find(a => a.id === appId);
   if (!app) { showToast('Candidature introuvable.', 'error'); return; }
 
-  document.getElementById('pageTitle').textContent = `Modifier â€” ${app.companyName}`;
+  document.getElementById('pageTitle').textContent = `Modifier — ${app.companyName}`;
 
   // Populate status select
   const statusSelectEl = document.getElementById('statusSelect');
@@ -185,7 +185,7 @@ let ALL_APPS = [];
   document.getElementById('appForm').addEventListener('submit', async e => {
     e.preventDefault();
     const submitBtn = e.target.querySelector('[type=submit]');
-    submitBtn.disabled = true; submitBtn.textContent = 'Enregistrementâ€¦';
+    submitBtn.disabled = true; submitBtn.textContent = 'Enregistrement…';
     try {
       const idx = ALL_APPS.findIndex(a => a.id === appId);
       ALL_APPS[idx] = {

@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="fr">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Paramètres — JobTracker</title>
+  <title>ParamÃ¨tres â€” JobTracker</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiIgZmlsbD0ibm9uZSI+CiAgPHJlY3QgeD0iMyIgeT0iMTEiIHdpZHRoPSIyNiIgaGVpZ2h0PSIxNyIgcng9IjMiIGZpbGw9IiNmMGE4MzIiIG9wYWNpdHk9IjAuMiIvPgogIDxyZWN0IHg9IjMiIHk9IjExIiB3aWR0aD0iMjYiIGhlaWdodD0iMTciIHJ4PSIzIiBzdHJva2U9IiNmMGE4MzIiIHN0cm9rZS13aWR0aD0iMiIvPgogIDxwYXRoIGQ9Ik0xMSAxMVY5QzExIDcuMzQgMTIuMzQgNiAxNCA2SDE4QzE5LjY2IDYgMjEgNy4zNCAyMSA5VjExIiBzdHJva2U9IiNmMGE4MzIiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CiAgPGxpbmUgeDE9IjMiIHkxPSIyMCIgeDI9IjI5IiB5Mj0iMjAiIHN0cm9rZT0iI2YwYTgzMiIgc3Ryb2tlLXdpZHRoPSIxLjUiIG9wYWNpdHk9IjAuNCIvPgogIDxyZWN0IHg9IjE0IiB5PSIxOC41IiB3aWR0aD0iNCIgaGVpZ2h0PSIzIiByeD0iMSIgZmlsbD0iI2YwYTgzMiIvPgo8L3N2Zz4=" />
@@ -11,7 +11,7 @@
 </head>
 <body>
 <nav class="navbar">
-  <a class="navbar-brand" href="../index.html">
+  <a class="navbar-brand" href="./index.html">
     <svg class="brand-logo" width="34" height="34" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
       <rect x="3" y="11" width="26" height="17" rx="3" fill="#f0a832" opacity="0.15"/>
       <rect x="3" y="11" width="26" height="17" rx="3" stroke="#f0a832" stroke-width="1.75"/>
@@ -22,9 +22,9 @@
     <span class="brand-text">JobTracker</span>
   </a>
   <div class="nav-links">
-    <a href="../index.html" class="nav-link">Tableau de bord</a>
+    <a href="./index.html" class="nav-link">Tableau de bord</a>
     <a href="./applications.html" class="nav-link">Candidatures</a>
-    <a href="./settings.html" class="nav-link active">Paramètres</a>
+    <a href="./settings.html" class="nav-link active">ParamÃ¨tres</a>
     <a href="./create.html" class="nav-btn">+ Nouvelle</a>
   </div>
 </nav>
@@ -32,15 +32,15 @@
   <div class="page-container page-narrow">
     <div class="page-header">
       <div>
-        <h1 class="page-title">Paramètres</h1>
+        <h1 class="page-title">ParamÃ¨tres</h1>
         <p class="page-subtitle">Connexion GitHub Gist</p>
       </div>
     </div>
     <div class="panel" style="margin-bottom:2rem;">
       <h2 class="panel-title">Comment configurer</h2>
       <ol style="color:var(--text-muted);font-size:.9rem;line-height:2;padding-left:1.25rem;">
-        <li>Allez sur <a href="https://github.com/settings/tokens/new?scopes=gist&description=JobTracker" target="_blank">github.com/settings/tokens</a> et créez un token avec le scope <strong>gist</strong> uniquement.</li>
-        <li>Collez le token ci-dessous, puis cliquez <em>Créer un nouveau Gist</em> (ou entrez un ID existant).</li>
+        <li>Allez sur <a href="https://github.com/settings/tokens/new?scopes=gist&description=JobTracker" target="_blank">github.com/settings/tokens</a> et crÃ©ez un token avec le scope <strong>gist</strong> uniquement.</li>
+        <li>Collez le token ci-dessous, puis cliquez <em>CrÃ©er un nouveau Gist</em> (ou entrez un ID existant).</li>
         <li>Cliquez <em>Enregistrer</em>.</li>
       </ol>
     </div>
@@ -55,18 +55,18 @@
           <input type="text" id="gistIdInput" class="form-input" placeholder="abc123..." />
         </div>
         <div class="form-group form-col-2" style="display:flex;align-items:flex-end;">
-          <button type="button" id="createGistBtn" class="btn btn-secondary" style="width:100%;">Créer un nouveau Gist</button>
+          <button type="button" id="createGistBtn" class="btn btn-secondary" style="width:100%;">CrÃ©er un nouveau Gist</button>
         </div>
         <div class="form-group form-col-full">
-          <label class="form-label">Clé API Google Maps (optionnel)</label>
+          <label class="form-label">ClÃ© API Google Maps (optionnel)</label>
           <input type="text" id="gmapsKeyInput" class="form-input" placeholder="AIza..." />
-          <small style="color:var(--text-muted);font-size:.8rem;">Autocomplétion de ville dans les formulaires.</small>
+          <small style="color:var(--text-muted);font-size:.8rem;">AutocomplÃ©tion de ville dans les formulaires.</small>
         </div>
       </div>
       <div class="form-actions">
         <button type="submit" class="btn btn-primary">Enregistrer</button>
         <button type="button" id="testConnBtn" class="btn btn-secondary">Tester la connexion</button>
-        <a href="../index.html" class="btn btn-ghost">Annuler</a>
+        <a href="./index.html" class="btn btn-ghost">Annuler</a>
       </div>
       <div id="connStatus" style="margin-top:1rem;"></div>
     </form>
@@ -86,15 +86,15 @@
     if (!pat) { alert('Entrez d\'abord le token GitHub.'); return; }
     saveSettings(pat, '', document.getElementById('gmapsKeyInput').value.trim());
     const btn = document.getElementById('createGistBtn');
-    btn.disabled = true; btn.textContent = 'Création…';
+    btn.disabled = true; btn.textContent = 'CrÃ©ationâ€¦';
     try {
       const id = await createGist();
       document.getElementById('gistIdInput').value = id;
-      showStatus('Gist créé : ' + id, true);
+      showStatus('Gist crÃ©Ã© : ' + id, true);
     } catch (e) {
       showStatus('Erreur : ' + e.message, false);
     } finally {
-      btn.disabled = false; btn.textContent = 'Créer un nouveau Gist';
+      btn.disabled = false; btn.textContent = 'CrÃ©er un nouveau Gist';
     }
   });
 
@@ -103,7 +103,7 @@
     const gistId = document.getElementById('gistIdInput').value.trim();
     saveSettings(pat, gistId, document.getElementById('gmapsKeyInput').value.trim());
     const result = await testConnection();
-    showStatus(result.ok ? 'Connexion réussie ✓' : 'Échec : ' + result.error, result.ok);
+    showStatus(result.ok ? 'Connexion rÃ©ussie âœ“' : 'Ã‰chec : ' + result.error, result.ok);
   });
 
   document.getElementById('settingsForm').addEventListener('submit', e => {
@@ -113,7 +113,7 @@
     const gmaps  = document.getElementById('gmapsKeyInput').value.trim();
     if (!pat || !gistId) { alert('Le token et l\'ID du Gist sont obligatoires.'); return; }
     saveSettings(pat, gistId, gmaps);
-    window.location.href = '../index.html';
+    window.location.href = './index.html';
   });
 
   function showStatus(msg, ok) {
